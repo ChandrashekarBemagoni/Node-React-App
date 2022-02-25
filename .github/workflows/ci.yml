@@ -6,18 +6,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-      - name: Deploy to Server
-        uses: easingthemes/ssh-deploy@main
-        env:
+      - name: executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@master
+        with:
+          host: 54.209.182.99
+          username: ubuntu
           SSH_PRIVATE_KEY: ${{ secrets.MY_KEY }}
           REMOTE_HOST: 54.209.182.99
           REMOTE_USER: ubuntu
           TARGET: /home/ubuntu/Node-React-App/
-        script:
-         cd server
-         pm2 start app.js
+          script: sh deploy.sh
             
