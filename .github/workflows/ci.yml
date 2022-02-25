@@ -10,9 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
-      - run: cd server
-      - run: pm2 start app.js
-
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@main
         env:
@@ -20,3 +17,7 @@ jobs:
           REMOTE_HOST: 54.209.182.99
           REMOTE_USER: ubuntu
           TARGET: /home/ubuntu/Node-React-App/
+        script:
+         cd server
+         pm2 start app.js
+            
