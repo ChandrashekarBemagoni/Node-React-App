@@ -6,18 +6,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2 
       - name: Deploy in EC2
         env:
-            PRIVATE_KEY: ${{ secrets.MY_KEY  }}
+            PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
             HOSTNAME : ${{ secrets.HOSTNAME  }}
-            USER_NAME : ${{ secrets.USER_NAME  }}
+            USER_NAME : ${{ secrets.USERNAME  }}
             
-        run:          
+        run: |
+            echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+            ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME}
             #Now we have got the access of EC2 and we will start the deploy .
             cd /home/ubuntu/test/Node-React-App &&
             git checkout master &&
             git fetch --all &&
             git reset --hard origin/master &&
-            git pull origin master && cd server && pm2 start app.js          
+            git pull origin master && cd server && pm2 start app.js
