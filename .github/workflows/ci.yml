@@ -8,25 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v2
-
-      - run: /home/ubuntu/test/Node-React-App
-      - run: |
-            ls -la
-            cd /home/ubuntu/test/Node-React-App
-            git checkout master
-            git fetch --all
-            git reset --hard origin/master
-            git pull origin master
-            cd server
-            pm2 start app.js
-      - name: rsync deployments
-        uses: burnett01/rsync-deployments@5.1
+      - name: executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@master
         with:
-          switches: -avzr --delete
-          path: ./*
-          remote_path: /home/ubuntu/test/
-          remote_host: ${{ secrets.HOSTNAME }}
-          remote_user: ${{ secrets.USER_NAME }}
-          remote_key: "${{ secrets.AWS_PRIVATE_KEY }}"
+          host: ${{ secrets.HOSTNAME  }}
+          username: ${{ secrets.USER_NAME  }}
+          key: ${{ secrets.AWS_PRIVATE_KEY  }}
+          script: sh deploy.sh
     
