@@ -14,5 +14,7 @@ jobs:
           host: ${{ secrets.HOSTNAME  }}
           username: ${{ secrets.USER_NAME  }}
           key: ${{ secrets.AWS_PRIVATE_KEY  }}
-          script: sh /home/ubuntu/test/Node-React-App/deploy.sh
+          script: cd /home/ubuntu/test/Node-React-App
+                  cd server
+                  pm2 start app.js
     
