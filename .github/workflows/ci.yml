@@ -6,17 +6,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - uses: actions/checkout@v2 
-      - name: Deploy to my EC2 instance
-      - uses: easingthemes/ssh-deploy@v2.1.5
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
-          SOURCE: "./"
-          REMOTE_HOST: ${{ secrets.HOSTNAME }}
-          REMOTE_USER: ${{ secrets.USER_NAME }}
-          TARGET: "/home/ubuntu/test/Node-React-App"
+      - uses: actions/checkout@v2
+
+      - run: /home/ubuntu/test/Node-React-App
       - run: |
             ls -la
             cd /home/ubuntu/test/Node-React-App
@@ -26,3 +20,13 @@ jobs:
             git pull origin master
             cd server
             pm2 start app.js
+      - name: rsync deployments
+        uses: burnett01/rsync-deployments@5.1
+        with:
+          switches: -avzr --delete
+          path: ./*
+          remote_path: /home/ubuntu/test/
+          remote_host: ${{ secrets.HOSTNAME }}
+          remote_user: ${{ secrets.USER_NAME }}
+          remote_key: "${{ secrets.AWS_PRIVATE_KEY }}"
+    
