@@ -6,5 +6,4 @@ app.get('/', (req,res) => {
     msg:'Hello backend'
   })
 })
-
-app.listen(3001);
+app.listen(3001, () => console.log(`Example app listening at http://localhost:${3001}`))
