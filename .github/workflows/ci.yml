@@ -10,14 +10,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2 
       - name: Deploy to my EC2 instance
-        uses: easingthemes/ssh-deploy@v2.1.5
+      - uses: easingthemes/ssh-deploy@v2.1.5
         env:
           SSH_PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
           SOURCE: "./"
           REMOTE_HOST: ${{ secrets.HOSTNAME }}
           REMOTE_USER: ${{ secrets.USER_NAME }}
           TARGET: "/home/ubuntu/test/Node-React-App"
-        with: |
+      - run: |
             ls -la
             cd /home/ubuntu/test/Node-React-App
             git checkout master
